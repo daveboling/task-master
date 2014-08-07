@@ -1,0 +1,19 @@
+extends ../shared/template
+block top
+	h5 Task List
+	table
+		tr
+			th Name
+			th Due By Date
+			th Photo
+			th Complete
+			th Tags
+			th Priority
+		each task in tasks
+			tr
+				td= task.name
+				td= task.due
+				td= task.photo
+				td= task.isComplete
+				td= task.tags
+				td= task.priority.name

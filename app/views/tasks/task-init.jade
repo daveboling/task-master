@@ -1,0 +1,16 @@
+extends ../shared/template
+block top
+			h5 Add Task
+			form(method="post" action="/tasks/new")
+				label Task Name
+				input(type="text" name="name")
+				label Due Date
+				input(type="date" name="date")
+				label Photo Link
+				input(type="text" name="photo")
+				lable Tags
+				input(type="text" name="tags")
+				select(name="priorityId")
+					each p in priorities
+						option(value="#{p._id}")= p.name
+				button submit

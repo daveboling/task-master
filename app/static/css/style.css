@@ -1,0 +1,54 @@
+body, html {
+	min-width: 800px;
+}
+
+nav ul {
+	list-style: none;
+}
+
+nav ul li {
+	display: inline-block;
+	padding: 20px;
+}
+
+form, nav{
+	width: 50%;
+	margin: 0px auto;
+	text-align: center;
+}
+
+form input {
+	display: block;
+	margin: 0px auto;
+}
+
+h1, h5 {
+	text-align: center;
+}
+
+.priorities {
+	width: 50%;
+	margin: 0px auto;
+	text-align: center;
+}
+
+.priorities div {
+	margin: 0px auto;
+}
+
+table {
+	width: 90%;
+	margin: 0px auto;
+}
+
+table th {
+	border: 2px solid black;
+	padding: 10px;
+}
+
+table tr td {
+	text-align: center;
+	border: 2px solid black;
+	padding: 5px;
+	font-weight: bold;
+}

@@ -1,0 +1,8 @@
+extends ../shared/template
+block top
+		h5 Priority List
+		.priorities
+			each p in priorities
+				div= p.name
+				div(style='background-color: #{p.color}; width: 20px; height: 20px')
+				div= p.value

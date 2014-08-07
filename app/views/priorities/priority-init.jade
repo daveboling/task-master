@@ -1,0 +1,8 @@
+extends ../shared/template
+block top
+		h5 Add New Priority
+		form(method="post" action="/priorities/new")
+			input(type="text" name="name")
+			input(type="color" name="color")
+			input(type="number" name="value")
+			button submit
