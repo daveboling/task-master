@@ -52,3 +52,19 @@ table tr td {
 	padding: 5px;
 	font-weight: bold;
 }
+
+.paginate {
+	text-align: center;
+}
+
+.paginate a {
+	padding: 20px;
+	font-size: 20px;
+}
+
+.tag {
+	display: inline;
+	border: 2px solid black;
+	margin-right: 5px;
+	padding: 3px;
+}

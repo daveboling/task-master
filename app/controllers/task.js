@@ -2,6 +2,8 @@
 
 var Priority = require('../models/priority');
 var Task     = require('../models/task');
+//Global flags
+var currentSort, currentPage, currentTag;
 
 exports.init = function(req, res){
 	Priority.all(function(p){
@@ -17,7 +19,11 @@ exports.create = function(req, res){
 };
 
 exports.index = function(req, res){
-	Task.all(function(o){
-		res.render('tasks/index', {tasks: o});
+	currentPage = req.query.page;
+	currentTag  = req.query.tag;
+	currentSort = req.query.sort;
+
+	Task.all(currentPage, currentTag, currentSort, function(tasks, count){
+		res.render('tasks/index', {tasks: tasks, page: currentPage, tag: currentTag, sort: currentSort, count: count});
 	});
 };

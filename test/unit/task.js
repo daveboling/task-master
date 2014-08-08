@@ -55,12 +55,40 @@ describe('Task', function() {
 
      describe('.all', function(){
      	it('should display all tasks in the database', function(done){
-     		Task.all(function(task){
-     			expect(task.length).to.equal(1);
+            p2 = new Priority({name:'high', color:'blue', value:15});
+            p3 = new Priority({name:'high', color:'green', value:15});
+
+            p1.save(function(){
+                p2.save(function()[
+                    p3.save(function(){
+                        t2 = new Task({name: 'Bread', due:'8-15-2014', photo: '', tags:'grocery, dairy', priorityId: p1._id});
+                        t3 = new Task({name: 'Potatoes', due:'8-15-2014', photo: '', tags:'grocery, dairy', priorityId: p2._id});
+                        t4 = new Task({name: 'More Milk', due:'8-15-2014', photo: '', tags:'grocery, dairy', priorityId: p3._id});
+                        t5 = new Task({name: 'More bread', due:'8-15-2014', photo: '', tags:'grocery, dairy', priorityId: p2._id});
+                        t6 = new Task({name: 'More potatoes', due:'8-15-2014', photo: '', tags:'grocery, dairy', priorityId: p2._id});
+                            t2.save(function(){
+                                t3.save(function(){
+                                    t4.save(function(){
+                                        t5.save(function(){
+                                            t6.save(function(){
+
+                                            });
+                                        });
+                                    ]);
+                                });
+                            });
+                    });
+                });
+            });
+
+
+     		Task.all(2, function(task){
+                expect(task[0].priority.name).to.equal('high');
      			done();
      		});
      	});
      });
+
 
 
 

@@ -8,7 +8,7 @@ var async = require('async');
 
 function Task(p){
   this.name  	  = p.name;
-  this.due   	  = moment(p.due).format('M/D/YYYY');
+  this.due   	  = moment(p.due).format('MM/DD/YYYY');
   this.photo 	  = p.photo;
   this.tags  	  = p.tags.split(', ');
   this.priorityId = p.priorityId;
@@ -25,33 +25,42 @@ Task.prototype.save = function(cb){
   Task.collection.save(this, cb);
 };
 
-Task.all = function(cb){
-  Task.collection.find().toArray(function(err, objects){
-    var task = objects.map(function(t){
+
+//demonstrates single responsibility principle
+Task.all = function(page, filter, sort, cb){
+
+  //default parameters
+  page   = (page) ? (parseInt(page) - 1) * 3 : 1;
+  sort   = (sort) ? sort : -1;
+  filter = (filter) ? {tags: filter} : {};
+
+
+  Task.collection.find(filter).limit(3).skip(page).sort({due: sort}).toArray(function(err, objects){
+    var tasks = objects.map(function(t){
       return changePrototype(t);
     });
 
+  //async map is in place to add priority objects to task objects 
+  //when we query for them. async.map(array, fn(item, cb), fn(err, newObj))
+  async.map(tasks, 
+     
+     function(task, callback){
+       Priority.findById(task.priorityId, function(priority){
+         task.priority = priority;
+         callback(null, task);
+       });
+     }, 
 
-    async.each(task, 
-      function(e, callback){
-        Priority.findById(e.priorityId, function(addPriority){
-          e.priority = addPriority;
-          //why the eff does this work?
-          task[0] = e;
-          callback();
+     function(err, mappedTasks){
+        //collection count returns the current # of models in a given collection
+        //A filter can be passed in as a parameter in order to limit count based on filter
+        Task.collection.count(filter, function(err, count){
+          //the callback to Task.all will send the newly mapped object and the count / 3 (because we're displaying only 3 per page)
+          cb(mappedTasks, Math.round(count / 3));
         });
-      }, 
-      function(err){
-        if(err){
-          console.log('There was an error putting Priorities into Tasks.');
-        } else {
-          console.log('Priorities added to tasks.');
-          console.log(task);
-          cb(task);
-        }
-        
-    });
-  });
+     });
+   });
+
 };
 
 Task.findById = function(id, cb){
@@ -64,13 +73,16 @@ Task.findById = function(id, cb){
   });
 };
 
-
-
 //PRIVATE FUNCTIONS//
 
 function changePrototype(obj){
   return _.create(Task.prototype, obj);
 }
 
+function addPriority(task, callback) {
+  Priority.findById(task._id, function(priority){
+    task.priority = priority;
+  });
+}
 
 module.exports = Task;
