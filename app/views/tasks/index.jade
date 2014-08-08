@@ -4,8 +4,8 @@ block top
 	table
 		tr
 			th Name
-			//These anchor tags contain inline ternary operators to check to see if the tags are in existence
-			th: a(href="/tasks?page=#{i + ((sort) ? '&sort=' + query.sort : '') + ((tag) ? '&tag=' + tag: '')}") Due
+			
+			th: a(href="/tasks?page=#{page + ((sort > 0) ? '&sort=' + -1 : '&sort=' + 1) + ((tag) ? '&tag=' + tag: '')}") Due
 			th Photo
 			th Complete
 			th Tags
@@ -13,13 +13,13 @@ block top
 		each task in tasks
 			tr
 				td= task.name
-				td= task.due
+				td #{moment(task.due).format('MM/DD/YYYY')}
 				td= task.photo
 				td= task.isComplete
 				td: each tag in task.tags
-						.tag: a(href="/tasks?page=#{i + ((sort) ? '&sort=' + query.sort : '') + ((tag) ? '&tag=' + tag: '')}")= tag
+						.tag: a(href="/tasks?page=#{page + ((sort) ? '&sort=' + sort : '') + ((tag) ? '&tag=' + tag: '')}")= tag
 				td= task.priority.name
 
 	.paginate
 		- for(var i = 1; i <= count; i++)
-			a(href="/tasks?page=#{i + ((sort) ? '&sort=' + query.sort : '') + ((tag) ? '&tag=' + tag: '')}")= i
+			a(href="/tasks?page=#{i + ((sort) ? '&sort=' + sort : '') + ((tag) ? '&tag=' + tag: '')}")= i
